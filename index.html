@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthy Mobile Usage Analyzer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .results {
+            margin-top: 20px;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Healthy Mobile Usage Analyzer</h1>
+        <form id="usageForm">
+            <label for="screenTime">Enter Daily Screen Time (in hours):</label>
+            <input type="text" id="screenTime" name="screenTime" required>
+
+            <label for="activity">Describe Recent Activities:</label>
+            <textarea id="activity" name="activity" rows="4" placeholder="e.g., Social media, Gaming, Studying..."></textarea>
+
+            <button type="button" onclick="analyzeUsage()">Analyze Usage</button>
+        </form>
+
+        <div id="results" class="results" style="display: none;">
+            <h3>Analysis Results:</h3>
+            <p id="analysisText">Loading...</p>
+        </div>
+    </div>
+
+    <script>
+        async function analyzeUsage() {
+            const screenTime = document.getElementById('screenTime').value;
+            const activity = document.getElementById('activity').value;
+            
+            const response = await fetch('/analyze', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ screenTime, activity })
+            });
+
+            const result = await response.json();
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('analysisText').innerText = result.analysis;
+        }
+    </script>
+</body>
+</html>
